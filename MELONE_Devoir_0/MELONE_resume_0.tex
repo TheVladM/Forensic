@@ -1,0 +1,271 @@
+
+\documentclass[12pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[french]{babel}
+\usepackage{geometry}
+\usepackage{graphicx}
+\usepackage{titlesec}
+\usepackage{fancyhdr}
+\usepackage{lastpage}
+\usepackage{enumitem}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{booktabs}
+\usepackage{tabularx}
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=magenta,      
+    urlcolor=cyan,
+}
+\geometry{a4paper, margin=2.5cm}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{1em}
+
+% Format des sections
+\titleformat{\section}{\Large\bfseries}{\thesection}{1em}{}
+\titleformat{\subsection}{\large\bfseries}{\thesubsection}{1em}{}
+\titleformat{\subsubsection}{\bfseries}{\thesubsubsection}{1em}{}
+
+\begin{document}
+
+% Page de garde
+\begin{titlepage}
+    \centering
+    \vspace*{1cm}
+    {\Huge\bfseries École Nationale Supérieure Polytechnique de Yaoundé \par}
+    \vspace{1.5cm}
+    {\Huge\bfseries RESUME DU LIVRE  \\ Théories et Pratiques de l'Investigation Numérique \par}
+    \vspace{1.5cm}
+    {\Large Nom et Prenoms de l'etudiant: MELONE Andre Vladmir \par}
+    \vspace{0.5cm}
+    {\large Matricule: 22p059 \par}
+    \vspace{0.5cm}
+    {\large Unité d'Enseignement: Introduction aux Techniques d'Investigation Numérique \par}
+    \vspace{0.5cm}
+    {\large Classe: Niveau 4 \par}
+    \vspace{0.5cm}
+    {\large Filière: Cybersécurité et Investigation Numérique \par}
+    \vspace{2cm}
+    {\large Enseignant : \\ Monsieur MINKA MI NGUIDJOI Thierry Emmanuel \par}
+    \vspace{1cm}
+
+\end{titlepage}
+
+
+\newpage
+
+\section{Introduction}
+
+
+\section*{Introduction}
+
+L’investigation numérique, encore appelée forensique numérique, désigne l’ensemble des méthodes scientifiques, techniques et juridiques permettant d’identifier, de collecter, de conserver, d’analyser et de présenter des preuves issues de supports ou environnements informatiques. Dans le contexte du Cameroun où la criminalité s’est largement déplacée vers le cyberespace avec par exemple des scammers, des harcelements en ligne par exemples, la question centrale demeure : comment garantir la fiabilité et la recevabilité des preuves numériques face à des menaces de plus en plus sophistiquées et à des environnements technologiques complexes ? Pour y répondre, ce document s’articule autour de plusieurs axes complémentaires : une présentation des fondements de l’investigation numérique et des normes internationales qui l’encadrent, une analyse des méthodologies pratiques utilisées par les experts, une mise en perspective du cadre juridique applicable, et enfin une ouverture sur des exemples concrets illustrant l’importance de cette discipline dans la lutte contre la cybercriminalité.
+.
+
+
+\section{Fondements Philosophiques et Historiques}
+
+\subsection{Philosophie de l'Investigation Numérique}
+
+L'investigation numérique dépasse la technique et touche à la philosophie, interrogeant la vérité, la confiance et la justice à l'ère numérique. Elle repose sur des fondements mathématiques comme la théorie de l'information (entropie de Shannon), la théorie des graphes et la théorie du chaos.
+
+\subsection{Histoire de la Discipline}
+
+\begin{itemize}
+    \item \textbf{1970-1990 :} Prémices (affaire du "414s").
+    \item \textbf{1990-2000 :} Professionnalisation (opération Sundevil, Kevin Mitnick).
+    \item \textbf{2000-2010 :} Standardisation (affaires Enron, Gary McKinnon).
+    \item \textbf{2010-2020 :} Big Data et Cloud (Silk Road, Panama Papers).
+    \item \textbf{2020-Présent :} Ère post-quantique et IA (SolarWinds).
+\end{itemize}
+
+\subsection{Grandes Affaires}
+
+\begin{itemize}
+    \item \textbf{BTK Killer (2005) :} Importance des métadonnées.
+    \item \textbf{Stuxnet (2010) :} Première cyberarme.
+    \item \textbf{WannaCry (2017) :} Pandémie numérique.
+\end{itemize}
+
+\section{Cadre Théorique et Normes}
+
+\subsection{Principes Théoriques}
+
+\begin{itemize}
+    \item \textbf{Principe de Locard numérique :} Toute action laisse une trace.
+    \item \textbf{Modèles d'investigation :} DFRWS, Casey, ISO/IEC 27037.
+\end{itemize}
+
+\subsection{Normes Internationales}
+
+\begin{itemize}
+    \item \textbf{ISO/IEC 27037 :} Guidelines pour l'identification, collecte et préservation des preuves.
+    \item \textbf{NIST SP 800-86 :} Guide pour l'intégration des techniques forensiques.
+    \item \textbf{RFC 3227 :} Ordre de volatilité (Farmer \& Venema).
+    \item \textbf{ACPO Good Practice Guide :} Quatre principes fondamentaux.
+\end{itemize}
+
+\section{Méthodologies et Outils}
+
+\subsection{Méthodologies d'Investigation}
+
+\begin{itemize}
+    \item \textbf{SANS FOR508 :} Six phases (Préparation, Identification, Containment, Eradication, Recovery, Lessons Learned).
+    \item \textbf{CERT/CC :} Processus de réponse aux incidents.
+    \item \textbf{ENISA :} Cadre forensique européen.
+    \item \textbf{DFRC-K :} Modèle coréen adapté aux spécificités locales.
+\end{itemize}
+
+\subsection{Outils et Techniques}
+
+\begin{itemize}
+    \item \textbf{Acquisition :} Outils d'imagerie (dd, FTK, EnCase).
+    \item \textbf{Analyse mémoire :} Volatility Framework.
+    \item \textbf{Anti-anti-forensique :} Techniques de contournement de chiffrement, détection de stéganographie.
+    \item \textbf{IA en investigation :} Machine Learning pour classification de malware, Deep Learning pour analyse comportementale.
+\end{itemize}
+
+\section{L'Ère Post-Quantique}
+
+\subsection{Impact du Quantique}
+
+\begin{itemize}
+    \item \textbf{Algorithme de Shor :} Casse RSA et ECC.
+    \item \textbf{Algorithme de Grover :} Réduction de la sécurité des clés symétriques.
+    \item \textbf{Harvest Now, Decrypt Later :} Stratégie de stockage pour décryptage futur.
+\end{itemize}
+
+\subsection{Cryptographie Post-Quantique (PQC)}
+
+\begin{itemize}
+    \item \textbf{Standards NIST :} CRYSTALS-Kyber (KEM), CRYSTALS-Dilithium (signatures).
+    \item \textbf{Migration hybride :} Combinaison de crypto classique et PQC.
+\end{itemize}
+
+\subsection{Quantum Forensics}
+
+Nouvelles opportunités : analyse de randomité quantique, tomographie d'état quantique pour preuves.
+
+\section{Le Trilemme CRO}
+
+\subsection{Formalisation}
+
+Le \textbf{Trilemme CRO} établit une incompatibilité formelle entre :
+\begin{itemize}
+    \item \textbf{Confidentialité (C) :} Protection des données.
+    \item \textbf{Fiabilité (R) :} Intégrité et authenticité.
+    \item \textbf{Opposabilité (O) :} Valeur probante légale.
+\end{itemize}
+
+Aucune primitive n'optimise simultanément les trois axes.
+
+\subsection{Analyse des Primitives}
+
+\begin{table}[h]
+    \centering
+    \begin{tabular}{lcccc}
+        \toprule
+        \textbf{Primitive} & \textbf{C} & \textbf{R} & \textbf{O} & \textbf{Résistance Q} \\
+        \midrule
+        AES-256 & 0.95 & 0.90 & 0.30 & Non \\
+        RSA-2048 & 0.85 & 0.90 & 0.95 & Non \\
+        ECDSA & 0.88 & 0.92 & 0.90 & Non \\
+        Kyber-768 & 0.92 & 0.85 & 0.40 & Oui \\
+        Dilithium-3 & 0.20 & 0.94 & 0.75 & Oui \\
+        \bottomrule
+    \end{tabular}
+    \caption{Scores CRO des primitives cryptographiques}
+\end{table}
+
+\subsection{Architecture Q2CSI}
+
+Infrastructure à couches :
+\begin{itemize}
+    \item \textbf{Iron Layer :} Fiabilité (intégrité temporelle).
+    \item \textbf{Gold Layer :} Confidentialité (preuves zero-knowledge).
+    \item \textbf{Clay Layer :} Opposabilité (ancrage institutionnel).
+\end{itemize}
+
+\section{Primitives Cryptographiques et Opposabilité}
+
+\subsection{Protocole ZK-NR}
+
+Zero-Knowledge Non-Repudiation Protocol :
+\begin{itemize}
+    \item Combine Merkle Commitments, STARK Proofs, Threshold BLS, Dilithium.
+    \item Permet une non-répudiation préservant la vie privée.
+    \item Sécurité UC (Universal Composability) prouvée.
+\end{itemize}
+
+\subsection{Applications}
+
+\begin{itemize}
+    \item \textbf{Chaîne de possession post-quantique :} Transfert sécurisé de preuves.
+    \item \textbf{Preuves vérifiables sans divulgation :} Préservation de la confidentialité.
+\end{itemize}
+
+\section{Cadre Juridique}
+
+\subsection{Droit International}
+
+\begin{itemize}
+    \item \textbf{États-Unis :} FRE Rule 901, SCA, CFAA.
+    \item \textbf{Europe :} Règlement eIDAS, RGPD, Convention de Budapest.
+    \item \textbf{Afrique :} Convention de Malabo, cadres régionaux (CEDEAO, SADC).
+\end{itemize}
+
+\subsection{Droit Camerounais}
+
+\begin{itemize}
+    \item \textbf{Loi 2010/012 :} Cybersécurité et cybercriminalité.
+    \item \textbf{Loi 2010/013 :} Communications électroniques.
+    \item \textbf{Loi 2024/017 :} Protection des données personnelles.
+    \item \textbf{Procédure :} Enquête préliminaire, expertise judiciaire, experts agréés.
+\end{itemize}
+
+\section{Pratique du Forensique}
+
+\subsection{Gestion de Laboratoire}
+
+\begin{itemize}
+    \item \textbf{Installation :} Matériel, logiciels (SIFT, REMnux), outils open source et commerciaux.
+    \item \textbf{Procédures :} Checklists, modèles de rapports, scripts d'automatisation.
+    \item \textbf{Accréditation :} Normes internationales, certification.
+\end{itemize}
+
+\subsection{Forensique Système}
+
+\begin{itemize}
+    \item \textbf{Analyse de fichiers :} NTFS, EXT4, APFS (spécificités forensiques).
+    \item \textbf{Artefacts :} Windows (Prefetch, Registre), Linux (logs, bash history), macOS (Spotlight, logs unifiés).
+    \item \textbf{Mémoire :} Volatility 3, détection de menaces quantiques.
+    \item \textbf{Timeline analysis :} Reconstruction temporelle multi-sources.
+\end{itemize}
+
+\subsection{Forensique Réseau}
+
+\begin{itemize}
+    \item \textbf{Capture PCAP :} Architecture haute performance, validation d'intégrité.
+    \item \textbf{Analyse de trafic :} DPI avec IA, détection de canaux cachés.
+    \item \textbf{Protocoles chiffrés :} Analyse TLS, détection PQC.
+\end{itemize}
+
+\subsection{Anti-Forensique}
+
+\begin{itemize}
+    \item \textbf{Techniques :} Effacement sécurisé, stéganographie, obfuscation.
+    \item \textbf{Contremesures :} Détection, IA défensive, frameworks de résilience.
+\end{itemize}
+
+\section{Conclusion}
+
+L'investigation numérique évolue vers une discipline globale, intégrant des aspects techniques, juridiques et éthiques. Le \textbf{Trilemme CRO} et les protocoles comme \textbf{ZK-NR} offrent un cadre pour naviguer les compromis entre confidentialité, fiabilité et opposabilité. La préparation à l'ère post-quantique est essentielle pour maintenir la confiance dans les preuves numériques.
+
+\vspace{1cm}
+
+
+
+\end{document}
