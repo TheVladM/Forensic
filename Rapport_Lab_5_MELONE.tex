@@ -1,0 +1,395 @@
+\documentclass[11pt,a4paper]{report}
+
+% Encodage et langue
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[french]{babel}
+
+% Mise en page
+\usepackage{geometry}
+\geometry{left=2.5cm,right=2.5cm,top=2.5cm,bottom=2.5cm}
+\usepackage{setspace}
+\onehalfspacing
+
+% En-têtes / pieds
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\fancyhf{}
+\renewcommand{\headrulewidth}{0.4pt}
+\fancyhead[L]{\small ENSPY}
+\fancyhead[R]{\small Cybersécurité et Investigation Numérique -- Niveau 4}
+\fancyfoot[C]{\thepage}
+
+% Couleurs et boîtes
+\usepackage{xcolor}
+\usepackage{tcolorbox}
+\tcbset{colback=white,colframe=black!60,sharp corners}
+
+% Tableaux et listings
+\usepackage{array,booktabs,multirow}
+\usepackage{longtable}
+\usepackage{caption}
+\usepackage{listings}
+\lstset{basicstyle=\small\ttfamily,breaklines=true,frame=single,backgroundcolor=\color{white!97}}
+
+% Hyperliens
+\usepackage{hyperref}
+\hypersetup{colorlinks=true,linkcolor=blue,citecolor=blue,urlcolor=blue}
+
+% Figures fixes
+\usepackage{float}
+\setcounter{topnumber}{0}
+\setcounter{bottomnumber}{0}
+\setcounter{totalnumber}{0}
+
+% Commandes utiles
+\newcommand{\school}{École Nationale Supérieure Polytechnique de Yaoundé}
+\newcommand{\course}{Cybersécurité et Investigation Numérique}
+\newcommand{\level}{Niveau 4}
+\newcommand{\student}{MELONE ANDRE V.}
+\newcommand{\matricule}{22p059}
+\newcommand{\discipline}{Introduction aux techniques d'investigation numerique}
+\newcommand{\teacher}{Mr MINKA Thierry}
+
+\begin{document}
+
+% Page de garde
+\begin{titlepage}
+  \centering
+  \vspace*{2cm}
+  {\Huge\bfseries \school\\[0.5cm]}
+  {\Large \course\\[0.5cm]}
+  {\large \level\\[2cm]}
+
+  \hrulefill\\[1cm]
+  {\LARGE \textbf{Rapport de Configuration d'une infrastructure reseau fonctionelle (Lab1)}}\\[0.5cm]
+  \hrulefill\\[2cm]
+
+  \begin{tabular}{rl}
+    \textbf{Étudiant :} & \student \\
+    \textbf{Matricule :} & \matricule \\
+    \textbf{Unite d'enseignement :} & \discipline \\
+    \textbf{Enseignant :} & \teacher \\
+    
+  \end{tabular}
+
+  \vfill
+  
+\end{titlepage}
+
+% Table des matières
+\tableofcontents
+\cleardoublepage
+
+\chapter*{Presentation du lab 1}
+
+Dans le cadre du cours d'investigation numerique, il nous est demande pour ce lab de configurer une infrastructure fonctionnelle comprenant un PC Kali, un serveur web Ubuntu, deux machines windows et un parefeu.\\
+
+Pour cela, voici l'architecture pour laquelle j'ai opté
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.8\textwidth]{Infrastructure.png}
+\caption{Capture d'écran : architecture reseau pour le lab}
+\label{fig:Infrastructure}
+\end{figure}
+
+
+\chapter{Configuration des machines}
+\label{ch:machines}
+
+Le tableau suivant resume les adresses ip de nos machines avec les differentes passerelles par defaut.\\
+
+\begin{tabular}{|p{4cm}|p{3.5cm}|p{3.5cm}|p{4cm}|}
+\hline
+
+\textbf{Machine} & \textbf{Adresse IP} & \textbf{Masque de sous-réseau} & \textbf{Passerelle par défaut} \\
+\hline
+\textbf{Win\_10\_Client1} & 192.168.1.6 & 255.255.255.0 & 192.168.1.7 (Fortigate) \\
+\hline
+\textbf{Win\_10\_Client2} & 172.126.3.3 & 255.255.255.0 & 172.126.3.4 (R1) \\
+\hline
+\textbf{Kali\_1} & 172.126.4.4 & 255.255.255.0 & 172.126.4.5 (R1) \\
+\hline
+\textbf{Svr\_Ubuntu\_1} & 192.168.5.2 & 255.255.255.0 & 192.168.5.1 (Fortigate) \\
+\hline
+\end{tabular}
+
+
+Les images suivantes montrent comment jai adresse Ubuntu et Kali. 
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.8\textwidth]{addrUbuntu.png}
+\caption{Capture d'écran : adressage du serveur ubuntu}
+\label{fig:addrUbuntu}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.8\textwidth]{adressKali.png}
+\caption{Capture d'écran : adressage du PC Kali Linux et test de connectivités avec sa gateway}
+\label{fig:addressKali}
+\end{figure}
+\chapter{Configuration du routeur R1}
+\label{ch:routeur}
+
+\section{Configuration des interfaces}
+Les commandes ci-dessous sont destinées à être collées dans l'interface CLI du routeur (mode privilégié) :
+
+\begin{lstlisting}[language={},caption={Configuration des interfaces - R1}]
+enable
+configure terminal
+
+interface e0/0
+ ip address 192.168.2.8 255.255.255.0
+ no shutdown
+
+interface e0/1
+ ip address 172.126.4.5 255.255.255.0
+ no shutdown
+
+interface e0/2
+ ip address 172.126.3.4 255.255.255.0
+ no shutdown
+
+do copy running-config startup-config
+end
+\end{lstlisting}
+
+\section{Ajout de routes statiques}
+Ci-dessous les entrées de routage statique fournies — certains chemins semblent redondants ou comportent des erreurs typographiques (par ex. 192.158.1.0) ; laissez-les tels quels si voulu, sinon corrigez en 192.168.x.x selon l'architecture réelle.
+
+\begin{lstlisting}[language={},caption={Routes statiques - R1}]
+conf t
+ip route 192.168.1.0 255.255.255.0 192.168.2.7
+ip route 192.168.5.0 255.255.255.0 192.168.2.7
+ip route 172.126.3.0 255.255.255.0 172.126.4.0
+ip route 172.126.3.0 255.255.255.0 192.168.1.0
+ip route 172.126.3.0 255.255.255.0 192.168.2.0
+ip route 172.126.4.0 255.255.255.0 172.126.3.0
+ip route 192.158.1.0 255.255.255.0 172.126.4.0
+ip route 192.168.1.0 255.255.255.0 192.168.2.7
+ip route 192.168.2.0 255.255.255.0 172.126.3.0
+ip route 192.168.2.0 255.255.255.0 172.126.4.0
+ip route 192.168.5.0 255.255.255.0 192.168.2.7
+ip route 192.168.5.0 255.255.255.0 172.126.4.0
+
+do copy running-config startup-config
+end
+\end{lstlisting}
+
+\paragraph{Conseils}
+\begin{itemize}
+  \item Vérifiez la cohérence des réseaux et corrigez les éventuelles fautes de frappe (ex : \texttt{192.158.1.0} probablement doit être \texttt{192.168.1.0}).
+  \item Pour éviter les routes contradictoires, préférez une seule route par destination avec la passerelle correcte.
+  \item Testez la connectivité étape par étape avec \texttt{ping} et \texttt{traceroute}.
+\end{itemize}
+
+\chapter{Configuration du pare-feu Fortigate}
+\label{ch:parefeu}
+
+\section{Interfaces du pare-feu}
+
+On saisit les commandes suivantes au niveau du pare-feu pour définir les interfaces :
+
+\begin{lstlisting}[language={},caption={Configuration des interfaces - pare-feu}]
+config system interface
+    edit "port1"
+        set mode static
+        set ip 192.168.2.7 255.255.255.0
+        set allowaccess ping https http ssh
+    next
+    edit "port2"
+        set mode static
+        set ip 192.168.1.7 255.255.255.0
+        set allowaccess ping https http ssh
+    next
+    edit "port3"
+        set mode static
+        set ip 192.168.5.1 255.255.255.0
+        set allowaccess ping https http ssh
+    next
+end
+\end{lstlisting}
+
+\section{Routes statiques (pare-feu)}
+\begin{lstlisting}[language={},caption={Routes statiques - pare-feu}]
+config router static
+    edit 1
+        set dst 0.0.0.0 0.0.0.0
+        set gateway 192.168.2.8
+        set device port1
+    next
+config router static
+    edit 1
+        set dst 172.126.3.0 255.255.255.0
+        set gateway 192.168.2.8
+        set device "port1"
+    next
+    edit 2
+        set dst 172.126.4.0 255.255.255.0
+        set gateway 192.168.2.8
+        set device "port1"
+    next
+    edit 3
+        set dst 192.168.1.0 255.255.255.0
+        set gateway 192.168.2.8
+        set device "port2"
+    next
+    edit 4
+        set dst 192.168.5.0 255.255.255.0
+        set gateway 192.168.2.8
+        set device "port3"
+    next
+end
+\end{lstlisting}
+
+\section{Création de services personnalisés}
+Définition des services ICMP et TCP/8000 :
+
+\begin{lstlisting}[language={},caption={Services personnalisés - pare-feu}]
+config firewall service custom
+    edit "ICMP_ALL"
+        set protocol ICMP
+    next
+end
+config firewall service custom
+    edit "TCP_8000"
+        set protocol TCP
+        set tcp-portrange 8000
+    next
+end
+\end{lstlisting}
+
+\section{Politiques de securite du pare-feu}
+Les politiques ci-dessous autorisent la communication entre les ports et l'ICMP/TCP_8000.
+
+\begin{lstlisting}[language={},caption={Politiques - pare-feu}]
+config firewall policy
+    edit 1
+        set name "Port1 to Port2"
+        set srcintf "port1"
+        set dstintf "port2"
+        set srcaddr "all"
+        set dstaddr "all"
+        set action accept
+        set schedule "always"
+        set service "ICMP_ALL"
+        set service "TCP_8000"
+        set logtraffic all
+    next
+    edit 2
+        set name "Port2 to Port1"
+        set srcintf "port2"
+        set dstintf "port1"
+        set srcaddr "all"
+        set dstaddr "all"
+        set action accept
+        set schedule "always"
+        set service "ICMP_ALL"
+        set service "TCP_8000"
+        set logtraffic all
+    next
+    edit 3
+        set name "Port1 to Port3"
+        set srcintf "port1"
+        set dstintf "port3"
+        set srcaddr "all"
+        set dstaddr "all"
+        set action accept
+        set schedule "always"
+        set service "ICMP_ALL"
+        set service "TCP_8000"
+        set logtraffic all
+    next
+    edit 4
+        set name "Port3 to Port1"
+        set srcintf "port3"
+        set dstintf "port1"
+        set srcaddr "all"
+        set dstaddr "all"
+        set action accept
+        set schedule "always"
+        set service "ICMP_ALL"
+        set service "TCP_8000"
+        set logtraffic all
+    next
+    edit 5
+        set name "Port2 to Port3"
+        set srcintf "port2"
+        set dstintf "port3"
+        set srcaddr "all"
+        set dstaddr "all"
+        set action accept
+        set schedule "always"
+        set service "ICMP_ALL"
+        set service "TCP_8000"
+        set logtraffic all
+    next
+    edit 6
+        set name "Port3 to Port2"
+        set srcintf "port3"
+        set dstintf "port2"
+        set srcaddr "all"
+        set dstaddr "all"
+        set action accept
+        set schedule "always"
+        set service "ICMP_ALL"
+        set service "TCP_8000"
+        set logtraffic all
+    next
+    edit 9
+        set name "Allow Ping"
+        set srcintf "any"
+        set dstintf "any"
+        set srcaddr "all"
+        set dstaddr "all"
+        set action accept
+        set service "PING"
+        set schedule "always"
+    next
+end
+\end{lstlisting}
+
+\chapter{Démarrage et test de l'application web}
+\label{ch:appweb}
+
+Cette section décrit la mise en service et la vérification de l'application web hébergée sur le serveur Ubuntu.
+
+\section{Lancement du serveur Django}
+Sur le serveur Ubuntu (\texttt{Svr\_Ubuntu\_1}), se placer dans le répertoire du projet puis exécuter la commande suivante :
+
+\begin{lstlisting}[language=bash,caption={Commande de lancement du serveur Django}]
+python3 manage.py runserver 192.168.5.2:8000
+\end{lstlisting}
+
+Le serveur démarre et affiche dans le terminal que l'application écoute sur l'adresse 192.168.5.2, port 8000.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.8\textwidth]{startserver.png}
+\caption{Capture d'écran : Application Django démarrée sur le serveur Ubuntu}
+\label{fig:startserver}
+\end{figure}
+
+
+\section{Accès depuis la machine Kali}
+Depuis la machine \texttt{Kali\_1}, ouvrir un navigateur web et entrer l'URL suivante :
+
+\begin{lstlisting}[language=bash]
+http://192.168.5.2:8000
+\end{lstlisting}
+
+Si l'infrastructure réseau fonctionne correctement, la page web de l'application doit s'afficher sans erreur.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.8\textwidth]{appOnKali.png}
+\caption{Capture d'écran : Application ouverte sur Kali}
+\label{fig:appOnkali}
+\end{figure}
+
+\paragraph{Validation du test}
+Cette démonstration prouve que les routes, les politiques du pare-feu et les interfaces sont configurées correctement. Le trafic TCP/8000 entre le serveur Ubuntu et le poste Kali est autorisé et fonctionnel.
+
+\end{document}
